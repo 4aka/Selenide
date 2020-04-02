@@ -1,0 +1,51 @@
+public void deleteElements(String[] deleteElement) {
+        String[] existsElements = getCardsNameList();   // Get current list of elements
+        String[] arrayForDeleting = deleteElement;      // Redefine array for deleting
+
+        int existIterator = 0;  // Iterator for existsElement[]
+        int deleteIterator = 0; // Iterator for arrayForDeleting[]
+
+        /**
+         * example:
+         * existsElements.length = 4
+         * arrayForDeleting.length = 2
+         *
+         * existsElements[3] == arrayForDeleting[0]
+         * arrayForDeleting = ArrayUtils.remove(arrayForDeleting, deleteIterator);
+         *
+         * existsElements.length = 4
+         * arrayForDeleting.length = 1
+         *
+         * existsElements[1] == arrayForDeleting[0]
+         * arrayForDeleting = ArrayUtils.remove(arrayForDeleting, deleteIterator);
+         *
+         * existsElements.length = 4
+         * arrayForDeleting.length = 0
+         * 
+         * break
+         */
+        while (Arrays.asList(existsElements).contains(arrayForDeleting[deleteIterator])) {
+
+            if ($x("//*[@id=\"contentArea\"]/tr[" + (existIterator + 1) + "]/td[@class='table-list-row__card-holder-name']")
+                    .getText()
+                    .matches(arrayForDeleting[deleteIterator])) {
+
+                $x("//*[@id=\"contentArea\"]/tr[" + (existIterator + 1) + "]//button")
+                        .click(); // click delete
+                $x("//*[@id=\"contentArea\"]/tr[" + (existIterator + 1) + "]//button")
+                        .shouldNotBe(visible); // assert that element was deleted.
+
+                existsElements = getCardsNameList(); // Get current list of elements after deleting element
+                existIterator = 0; // reset iterator for start finding from 0 element
+
+                arrayForDeleting = ArrayUtils.remove(arrayForDeleting, deleteIterator); // Delete element from deleting array
+                if (arrayForDeleting.length == 0) {
+                    break;
+                }
+                deleteIterator = 0; // reset iterator for start finding from 0 element
+
+            } else {
+                existIterator += 1; // if element didn't find out raise iterator
+            }
+        }
+    }
