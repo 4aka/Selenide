@@ -1,0 +1,132 @@
+
+    /**
+     * Scroll page to id element. By CSS
+     *
+     * @param idElement set id element for scroll to.
+     * @apiNote #element, .element.
+     */
+    public void scrollByID(String idElement) {
+        $(idElement).scrollIntoView(false);
+        $(idElement).scrollIntoView("{block: \"end\"}");
+    }
+
+    /**
+     * Scroll page to id element. By xPath
+     *
+     * @param xPathElement set element id
+     */
+    public void scrollByXPath(String xPathElement) {
+        $x("//*[@id=" + "\"" + xPathElement + "\"" + "]").scrollIntoView(false);
+        $x("//*[@id=" + "\"" + xPathElement + "\"" + "]").scrollIntoView("{block: \"end\"}");
+    }
+
+    /**
+     * Start timer.
+     */
+    public int startTimer() {
+        int start = java.time.LocalTime.now().toSecondOfDay();
+        System.out.println("Timer started");
+        return start;
+    }
+
+    /**
+     * Stop timer.
+     *
+     * @param startTime get int - per seconds of the day.
+     */
+    public void stopTimer(int startTime) {
+        int stopTime = java.time.LocalTime.now().toSecondOfDay();
+        if ((stopTime - startTime) <= 60) {
+            System.out.println("The process has taken: " + (stopTime - startTime) + " sec");
+        } else {
+            int min = (int) TimeUnit.SECONDS.toMinutes(stopTime - startTime);
+            System.out.println("The process has taken: " + min + " min " + ((stopTime - startTime) - min * 60) + " sec");
+        }
+    }
+
+    /**
+     * Create future date in format dd.MM.yyyy
+     *
+     * @param howDaysAddToCurrentDate days quantity
+     * @return date dd.MM.yyyy
+     */
+    public String createFutureDate(int howDaysAddToCurrentDate) {
+        DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+        long timeMilli = System.currentTimeMillis() + (86400000 * howDaysAddToCurrentDate);
+        return format.format(new Date(timeMilli));
+    }
+
+    /**
+     * Get current date dd.MM.yyyy
+     */
+    public String getCurrentDate() {
+        DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+        long timeMilli = System.currentTimeMillis();
+        return format.format(new Date(timeMilli));
+    }
+
+    /**
+     * return current Month name - January, February ...
+     */
+    public String getCurrentMonthName() {
+        DateFormat format = new SimpleDateFormat("MMMM", Locale.US);
+        long timeMilli = System.currentTimeMillis();
+        return format.format(new Date(timeMilli));
+    }
+
+    /**
+     * return current month number - 01, 02 ...
+     */
+    public String getCurrentMonthNumber() {
+        DateFormat format = new SimpleDateFormat("MM");
+        long timeMilli = System.currentTimeMillis();
+        return format.format(new Date(timeMilli));
+    }
+
+    /**
+     * return current year
+     */
+    public String getCurrentYear() {
+        DateFormat format = new SimpleDateFormat("yyyy");
+        long timeMilli = System.currentTimeMillis();
+        return format.format(new Date(timeMilli));
+    }
+
+    /**
+     * @param amount add space: "1234567890.10" => "1 234 567 890.10"
+     */
+    public String changeDisplayingFormat(String amount) {
+        if (!amount.contains(".")) {
+            amount = amount + ".00"; // add .00 to amount
+        }
+        int l = amount.length() - 3; // amount - .00 (3 symbols)
+        String end = amount.substring(l, amount.length());
+        String s = " "; // space
+
+        if (l == 4 || l == 7 || l == 10) {
+            char first = amount.toCharArray()[0]; // first symbol.
+            String one4 = amount.substring(1, 4); // 1,2,3 symbols
+            String four7 = amount.substring(4, 7); // 4,5,6 symbols
+
+            if (l == 4) return first + s + one4 + end; // last three symbols ".00"
+            if (l == 7) return first + s + one4 + s + four7 + end;
+
+            String seven10 = amount.substring(7, 10);
+            return first + s + one4 + s + four7 + seven10 + end;
+        } else if (l == 5 || l == 8) {
+            String zero2 = amount.substring(0, 2);
+            String two5 = amount.substring(2, 5);
+            String five8 = amount.substring(5, 8);
+
+            if (l == 5) return zero2 + s + two5 + end;
+            return zero2 + s + two5 + s + five8 + end;
+        } else if (l == 6 || l == 9) {
+            String zero3 = amount.substring(0, 3);
+            String three6 = amount.substring(3, 6);
+            String five8 = amount.substring(6, 9);
+
+            if (l == 6) return zero3 + s + three6 + end;
+            return zero3 + s + three6 + s + five8 + end;
+        }
+        return amount;
+    }
