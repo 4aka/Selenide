@@ -1,0 +1,42 @@
+    public String[] getAccountsList(String currency) {
+        getAccountsScreen();
+
+        $x("//*[@id=\"remainders\"]/tbody/tr").waitUntil(visible, 10000);
+
+        int size = $$x("//*[@id=\"remainders\"]/tbody/tr").size(); // get string quantity in the list
+        assert size > 0;
+        List<String> acc = new ArrayList<>();
+
+        for (int i = 0; i < size; i++) {
+
+            // https://stackoverflow.com/questions/25417363/java-string-contains-matches-exact-word
+            String pattern = "\\b" + currency.toUpperCase() + "\\b"; // searching goal
+            Pattern p = Pattern.compile(pattern);
+            Matcher m = p.matcher($x("//*[@id=\"remainders\"]/tbody/tr[" + (i + 1) + "]").getText()); // path to element
+            boolean isContainsCurrencyInTheString = m.find();
+
+            // Check that currency position in the list matches with some string. ex. UAH = position 1
+            if (isContainsCurrencyInTheString) { // => i = 15
+
+                // Increase iterator because next position is getting account number
+                i += 1;
+
+                // get next position while it is not contains "currency"
+                while (!$x("//*[@id=\"remainders\"]/tbody/tr[" + (i + 1) + "]").getText().contains("Accounts in currency")) {
+
+                    // get account number
+                    String getAcc = $x("//*[@id=\"remainders\"]/tbody/tr[" + (i + 1) + "]/td[@class='table-list-row__account']")
+                            .getText();
+                    acc.add(getAcc);
+
+                    assert acc.get(0) != null;
+                    // Increase iterator for getting account number in the next position
+                    if (i == size - 1) break; else i += 1;
+                }
+                break;
+            }
+        }
+        String[] result = new String[acc.size()];
+        assert acc.toArray(result).length > 0;
+        return acc.toArray(result);
+    }
