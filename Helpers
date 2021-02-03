@@ -69,53 +69,99 @@
     }
 
     /**
+     * @return current day number
+     */
+    public static int returnCurrentDayNumberOfWeek() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setFirstDayOfWeek(Calendar.MONDAY);
+        return calendar.get(Calendar.DAY_OF_WEEK);
+    }
+
+    /**
+     * @return current day name
+     */
+    public static String returnCurrentDayName() {
+        Calendar calendar = Calendar.getInstance();
+        Date date = calendar.getTime();
+        return new SimpleDateFormat("EEEE", Locale.ENGLISH).format(date.getTime());
+    }
+
+    /**
      * Create future date in format dd.MM.yyyy
      *
      * @param howDaysAddToCurrentDate days quantity
      * @return date dd.MM.yyyy
      */
-    public String createFutureDate(int howDaysAddToCurrentDate) {
+    public static String returnFutureDate(int howDaysAddToCurrentDate) {
         DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-        long timeMilli = System.currentTimeMillis() + (86400000 * howDaysAddToCurrentDate);
-        return format.format(new Date(timeMilli));
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.setTime(new Date());
+        calendar.add(Calendar.DATE, howDaysAddToCurrentDate);
+        return format.format(calendar.getTimeInMillis());
     }
 
     /**
      * Get current date dd.MM.yyyy
      */
-    public String getCurrentDate() {
+    public static String returnCurrentDate() {
         DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
-        long timeMilli = System.currentTimeMillis();
-        return format.format(new Date(timeMilli));
+        Calendar calendar = Calendar.getInstance();
+        return format.format(calendar.getTimeInMillis());
+    }
+
+    /**
+     * Get current date MM.yyyy
+     */
+    public static String returnCurrentMonthYear() {
+        DateFormat format = new SimpleDateFormat("MM.yyyy");
+        Calendar calendar = Calendar.getInstance();
+        return format.format(calendar.getTimeInMillis());
+    }
+
+    /**
+     * Get current date dd.MM.yyyy
+     */
+    public static String returnPastDate(int howDaysSubtractFromCurrentDate) {
+        int date = -howDaysSubtractFromCurrentDate;
+        DateFormat format = new SimpleDateFormat("dd.MM.yyyy");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(new Date());
+        calendar.add(Calendar.DATE, date);
+
+        return format.format(calendar.getTimeInMillis());
     }
 
     /**
      * return current Month name - January, February ...
      */
-    public String getCurrentMonthName() {
+    public static String returnCurrentMonthName() {
         DateFormat format = new SimpleDateFormat("MMMM", Locale.US);
-        long timeMilli = System.currentTimeMillis();
-        return format.format(new Date(timeMilli));
+        Calendar calendar = Calendar.getInstance();
+
+        return format.format(calendar.getTimeInMillis());
     }
 
     /**
      * return current month number - 01, 02 ...
      */
-    public String getCurrentMonthNumber() {
+    public static String returnCurrentMonthNumber() {
         DateFormat format = new SimpleDateFormat("MM");
-        long timeMilli = System.currentTimeMillis();
-        return format.format(new Date(timeMilli));
+        Calendar calendar = Calendar.getInstance();
+
+        return format.format(calendar.getTimeInMillis());
     }
 
     /**
-     * return current year
+     * return current year - 2020
      */
-    public String getCurrentYear() {
+    public static String returnCurrentYear() {
         DateFormat format = new SimpleDateFormat("yyyy");
-        long timeMilli = System.currentTimeMillis();
-        return format.format(new Date(timeMilli));
-    }
+        Calendar calendar = Calendar.getInstance();
 
+        return format.format(calendar.getTimeInMillis());
+    }
+    
     /**
      * @param amount add space: "1234567890.10" => "1 234 567 890.10"
      */
