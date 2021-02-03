@@ -1,3 +1,27 @@
+    /**
+     * Rounding a double (StackOverflow)
+     *
+     * @param value  set double
+     * @param places set how much symbols it is needed to round
+     */
+    public double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        long factor = (long) Math.pow(10, places);
+        value = value * factor;
+        long tmp = Math.round(value);
+        return (double) tmp / factor;
+    }
+    
+    public String round(double value) {
+        String strDouble = String.format("%.2f", value);
+        return strDouble;
+    }
+    
+    public String round(double value) {
+        DecimalFormat df = new DecimalFormat("#.##");
+        String formatted = df.format(value);
+    }
 
     /**
      * Scroll page to id element. By CSS
