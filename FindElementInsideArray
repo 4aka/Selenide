@@ -45,7 +45,7 @@ public void deleteElements(String[] deleteElement) {
                 deleteIterator = 0; // reset iterator for start finding from 0 element
 
             } else {
-                existIterator += 1; // if element didn't find out raise iterator
+                existIterator += 1; // if element didn't find raise iterator
             }
         }
     }
