@@ -1,3 +1,7 @@
+    /**
+     * @param currency set currency.
+     * @return accounts list with set currency
+     */
     public String[] getAccountsList(String currency) {
         getAccountsScreen();
 
@@ -16,7 +20,7 @@
             boolean isContainsCurrencyInTheString = m.find();
 
             // Check that currency position in the list matches with some string. ex. UAH = position 1
-            if (isContainsCurrencyInTheString) { // => i = 15
+            if (isContainsCurrencyInTheString) {
 
                 // Increase iterator because next position is getting account number
                 i += 1;
@@ -28,7 +32,7 @@
                     String getAcc = $x("//*[@id=\"remainders\"]/tbody/tr[" + (i + 1) + "]/td[@class='table-list-row__account']")
                             .getText();
                     acc.add(getAcc);
-
+//                    System.out.println(getAcc);
                     assert acc.get(0) != null;
                     // Increase iterator for getting account number in the next position
                     if (i == size - 1) break; else i += 1;
@@ -39,4 +43,53 @@
         String[] result = new String[acc.size()];
         assert acc.toArray(result).length > 0;
         return acc.toArray(result);
+    }
+
+    /**
+     * Version till 2026_5xxx
+     *
+     * @param currency set currency.
+     * @return accounts list with set currency
+     */
+    public String[] getAccountsListByCurrencyAndMFO(String currency, String mfo) {
+        getAccountsScreen();
+
+        $x("//*[@id=\"remainders\"]/tbody/tr").waitUntil(visible, 10000);
+
+        int lenthArray = 0;
+        int size = $$x("//*[@id=\"remainders\"]/tbody/tr").size(); // get accounts array size
+        String getCurrency;
+        String getMFO;
+
+        // Find length for an array that will be created.
+        for (int i = 0; i < size; i++) {
+            getCurrency = $x("//*[@id=\"remainders\"]/tbody/tr[" + (i + 1) + "]/td[@class='table-list-row__currency']")
+                    .getText();
+
+            getMFO = $x("//*[@id=\"remainders\"]/tbody/tr[" + (i + 1) + "]/td[@class='table-list-row__mfo']")
+                    .getText();
+
+            if (getCurrency.contains(currency) && getMFO.contains(mfo)) {
+                lenthArray += 1;
+            }
+        }
+
+        // Array that will be returned
+        String[] accounts = new String[lenthArray];
+        int arrayIterator = 0; // iterator for new array.
+
+        for (int k = 0; k < size; k++) {
+            getCurrency = $x("//*[@id=\"remainders\"]/tbody/tr[" + (k + 1) + "]/td[@class='table-list-row__currency']")
+                    .getText();
+
+            getMFO = $x("//*[@id=\"remainders\"]/tbody/tr[" + (k + 1) + "]/td[@class='table-list-row__mfo']")
+                    .getText();
+
+            if (getCurrency.contains(currency) && getMFO.contains(mfo)) {
+                accounts[arrayIterator] = $x("//*[@id=\"remainders\"]/tbody/tr[" + (k + 1) + "]/td[@class='table-list-row__account']")
+                        .getText();
+                arrayIterator += 1;
+            }
+        }
+        return accounts;
     }
